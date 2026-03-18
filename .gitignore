@@ -1,0 +1,13 @@
+.env
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+models/
+*.egg-info/
+test_smoke.log
+smoke.log
+test_out.txt
+data/raw/*.csv
+data/processed/*.csv
