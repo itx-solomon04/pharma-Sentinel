@@ -14,10 +14,41 @@ from datetime import datetime
 
 try:
     from src.preprocess import clean_text, preprocess_dataframe
+    PREPROCESS_AVAILABLE = True
+except Exception:
+    PREPROCESS_AVAILABLE = False
+    def clean_text(t): return str(t).lower().strip()
+    def preprocess_dataframe(df): return df
+
+try:
     from src.ade import rule_based_ade_extraction, map_to_meddra, classify_severity
+    ADE_AVAILABLE = True
+except Exception:
+    ADE_AVAILABLE = False
+    def rule_based_ade_extraction(t): return []
+    def map_to_meddra(t): return "Unknown"
+    def classify_severity(t, a): return "MODERATE"
+
+try:
     from src.sentiment import get_vader_sentiment, get_aspect_sentiment
-except Exception as e:
-    st.error(f"Failed loading ML modules: {e}")
+    SENTIMENT_AVAILABLE = True
+except Exception:
+    SENTIMENT_AVAILABLE = False
+    def get_vader_sentiment(t): return 0.0, "neutral"
+    def get_aspect_sentiment(t): return {"efficacy": None, "side_effects": None, "cost": None, "experience": None}
+
+try:
+    from bertopic import BERTopic
+    BERTOPIC_AVAILABLE = True
+except Exception:
+    BERTOPIC_AVAILABLE = False
+
+try:
+    from transformers import pipeline
+    TRANSFORMERS_AVAILABLE = True
+except Exception:
+    TRANSFORMERS_AVAILABLE = False
+
 
 st.set_page_config(page_title="PHARMA SENTINEL — Patient Intelligence Platform", layout="wide", page_icon="💊")
 
@@ -518,7 +549,19 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
 
     elif page == "Topic Modelling":
         st.subheader("Topic Modelling")
-        st.info("Operating via advanced BERTopic Semantic Dense Clustering over historical text vectors.")
+
+        if not BERTOPIC_AVAILABLE:
+            st.info("Running in static mode — topics loaded from pre-computed results. (BERTopic not installed in this environment.)")
+            try:
+                oz_top = pd.read_csv("data/processed/ozempic_topics.csv")
+                met_top = pd.read_csv("data/processed/metformin_topics.csv")
+            except Exception:
+                st.warning("Pre-computed topic files not found. Please run src/topics.py locally first.")
+                oz_top = pd.DataFrame()
+                met_top = pd.DataFrame()
+        else:
+            st.info("Operating via BERTopic Semantic Dense Clustering over historical text vectors.")
+
         c1, c2 = st.columns(2)
         with c1:
             if not oz_top.empty:
@@ -536,6 +579,7 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
                 for _, row in met_top[met_top['topic_id'] != -1].head(6).iterrows():
                     with st.expander(f"Topic {row['topic_id']} • {row['size']} mentions"):
                         st.code(row['keywords'], language="")
+
 
     elif page == "AI Summary Report":
         st.subheader("AI Summary Report")

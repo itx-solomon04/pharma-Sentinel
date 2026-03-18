@@ -10,4 +10,3 @@ test_smoke.log
 smoke.log
 test_out.txt
 data/raw/*.csv
-data/processed/*.csv
