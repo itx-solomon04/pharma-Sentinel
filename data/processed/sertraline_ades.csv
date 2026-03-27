@@ -1,0 +1,11 @@
+drug,condition,text,rating,date,helpful_votes,source,clean_text,word_count,detected_ades,meddra_categories,ade_count,ade_severities
+Sertraline,Depression / Anxiety,Severe nausea and diarrhea for the first month,1,2024-06-01,38,synthetic,severe nausea diarrhea first month,5,"diarrhea, nausea",Gastrointestinal disorders,2,"SEVERE, SEVERE"
+Sertraline,Depression / Anxiety,"Sexual dysfunction is a major side effect, very frustrating",3,2022-01-30,49,synthetic,sexual dysfunction major side effect frustrating,6,,,0,
+Sertraline,Depression / Anxiety,Insomnia got worse when I started sertraline,2,2022-07-01,4,synthetic,insomnia got worse started sertraline,5,,,0,
+Sertraline,Depression / Anxiety,"Headaches and sweating constantly, considering stopping",4,2024-04-28,24,synthetic,headaches sweating constantly considering stopping,5,,,0,
+Sertraline,Depression / Anxiety,Finally found an antidepressant that works without bad side effects,7,2022-03-07,44,synthetic,finally found antidepressant works without bad side effects,8,,,0,
+Sertraline,Depression / Anxiety,Sertraline has helped my depression significantly after 6 weeks,10,2022-01-02,16,synthetic,sertraline helped depression significantly 6 weeks,6,depression,Psychiatric disorders,1,SEVERE
+Sertraline,Depression / Anxiety,"Mood improved dramatically, sleeping better too",9,2023-07-13,0,synthetic,mood improved dramatically sleeping better,5,,,0,
+Sertraline,Depression / Anxiety,"Weight gain of 20 pounds in 3 months, very unhappy",2,2023-04-30,46,synthetic,weight gain 20 pounds 3 months unhappy,7,,,0,
+Sertraline,Depression / Anxiety,"Anxiety is much better controlled, finally feeling normal",8,2023-04-10,31,synthetic,anxiety much better controlled finally feeling normal,7,anxiety,Psychiatric disorders,1,MILD
+Sertraline,Depression / Anxiety,Life changing medication for my OCD and depression,10,2023-04-04,43,synthetic,life changing medication ocd depression,5,depression,Psychiatric disorders,1,SEVERE

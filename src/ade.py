@@ -119,23 +119,22 @@ def analyze_dataframe(df, ner_pipeline=None):
     return df
 
 def main():
-    ozempic_file, metformin_file = 'data/processed/ozempic_clean.csv', 'data/processed/metformin_clean.csv'
-    if not (os.path.exists(ozempic_file) and os.path.exists(metformin_file)): return
-        
-    oz_df, met_df = pd.read_csv(ozempic_file), pd.read_csv(metformin_file)
-    oz_ade_df = analyze_dataframe(oz_df, ner_pipeline=None)
-    met_ade_df = analyze_dataframe(met_df, ner_pipeline=None)
-    
-    oz_ade_df.to_csv('data/processed/ozempic_ades.csv', index=False)
-    met_ade_df.to_csv('data/processed/metformin_ades.csv', index=False)
+    drugs = ['ozempic', 'metformin', 'ibuprofen', 'sertraline', 'lisinopril', 'jardiance']
     
     def print_metrics(df, name):
         ade_list = [x.strip() for row in df['detected_ades'] if str(row).strip() for x in str(row).split(",")]
         print(f"\n--- {name} Top Detected ADEs ---")
         for ade, count in collections.Counter(ade_list).most_common(5): print(f"  - {ade}: {count}")
 
-    print_metrics(oz_ade_df, "Ozempic")
-    print_metrics(met_ade_df, "Metformin")
+    for drug in drugs:
+        in_file = f'data/processed/{drug}_clean.csv'
+        out_file = f'data/processed/{drug}_ades.csv'
+        if not os.path.exists(in_file): continue
+            
+        df = pd.read_csv(in_file)
+        ade_df = analyze_dataframe(df, ner_pipeline=None)
+        ade_df.to_csv(out_file, index=False)
+        print_metrics(ade_df, drug.capitalize())
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,11 @@
+drug,condition,text,rating,date,helpful_votes,source,clean_text,word_count,detected_ades,meddra_categories,ade_count,ade_severities,vader_score,vader_label,efficacy_sentiment,side_effect_sentiment,cost_sentiment,experience_sentiment,overall_sentiment
+Jardiance,Type 2 Diabetes,Lost 15 pounds as a bonus while controlling blood sugar,7,2023-01-02,8,synthetic,lost 15 pounds bonus controlling blood sugar,7,blood sugar,Metabolism disorders,1,MILD,0.296,positive,0.296,,,,0.296
+Jardiance,Type 2 Diabetes,Frequent urination disrupting my sleep every night,2,2023-08-07,40,synthetic,frequent urination disrupting sleep every night,6,,,0,,0.0,neutral,,,,,
+Jardiance,Type 2 Diabetes,"Heart benefits are well documented, feel much safer",8,2022-09-06,31,synthetic,heart benefits well documented feel much safer,7,heart,Cardiac disorders,1,MILD,0.7579,positive,,,,,
+Jardiance,Type 2 Diabetes,"Dehydration and dizziness, had to reduce dose",1,2023-09-03,14,synthetic,dehydration dizziness reduce dose,4,dizziness,Nervous system disorders,1,MILD,0.0,neutral,,,,0.0,0.0
+Jardiance,Type 2 Diabetes,"Energy improved significantly, A1C dropping steadily",9,2023-03-14,15,synthetic,energy improved significantly a1c dropping steadily,6,,,0,,0.6369,positive,0.6369,,,,0.6369
+Jardiance,Type 2 Diabetes,Blood sugar finally under control after years of struggling,7,2022-03-31,45,synthetic,blood sugar finally control years struggling,6,blood sugar,Metabolism disorders,1,MODERATE,-0.4215,negative,-0.4215,,,,-0.4215
+Jardiance,Type 2 Diabetes,Recurrent UTI infections since starting Jardiance,2,2023-05-20,40,synthetic,recurrent uti infections since starting jardiance,6,,,0,,0.0,neutral,,,,,
+Jardiance,Type 2 Diabetes,"Yeast infections constantly, very uncomfortable",2,2022-05-04,28,synthetic,yeast infections constantly uncomfortable,4,,,0,,-0.3818,negative,,,,,
+Jardiance,Type 2 Diabetes,Jardiance lowered my A1C from 9.2 to 6.8 in 3 months,9,2022-06-10,7,synthetic,jardiance lowered a1c 9 2 6 8 3 months,9,,,0,,-0.128,negative,-0.128,,,,-0.128
+Jardiance,Type 2 Diabetes,"Genital itching and burning, embarrassing side effect",1,2023-09-11,29,synthetic,genital itching burning embarrassing side effect,6,,,0,,-0.3818,negative,,,,,

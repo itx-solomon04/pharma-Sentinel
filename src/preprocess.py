@@ -33,20 +33,16 @@ def preprocess_dataframe(df):
     return df[df['clean_text'].str.strip() != ""]
 
 def main():
-    ozempic_in, metformin_in = 'data/raw/ozempic_posts.csv', 'data/raw/metformin_posts.csv'
-    ozempic_out, metformin_out = 'data/processed/ozempic_clean.csv', 'data/processed/metformin_clean.csv'
-    
+    drugs = ['ozempic', 'metformin', 'ibuprofen', 'sertraline', 'lisinopril', 'jardiance']
     os.makedirs('data/processed', exist_ok=True)
     
-    if os.path.exists(ozempic_in):
-        oz_clean = preprocess_dataframe(pd.read_csv(ozempic_in))
-        oz_clean.to_csv(ozempic_out, index=False)
-        print(f"Saved {len(oz_clean)} cleaned Ozempic observations")
-        
-    if os.path.exists(metformin_in):
-        met_clean = preprocess_dataframe(pd.read_csv(metformin_in))
-        met_clean.to_csv(metformin_out, index=False)
-        print(f"Saved {len(met_clean)} cleaned Metformin observations")
+    for drug in drugs:
+        in_path = f'data/raw/{drug}_posts.csv'
+        out_path = f'data/processed/{drug}_clean.csv'
+        if os.path.exists(in_path):
+            df_clean = preprocess_dataframe(pd.read_csv(in_path))
+            df_clean.to_csv(out_path, index=False)
+            print(f"Saved {len(df_clean)} cleaned {drug.capitalize()} observations")
 
 if __name__ == '__main__':
     main()

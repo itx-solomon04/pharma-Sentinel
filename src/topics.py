@@ -34,33 +34,27 @@ def get_topic_summary(topic_model):
         
     return pd.DataFrame(records)
 
-def compare_drug_topics(oz_topics, met_topics):
-    def print_themes(df, name):
-        print(f"\n--- {name} CORE THEMES ---")
-        if df.empty: print("No topics generated.")
-        else:
-            for _, row in df[df['topic_id'] != -1].head(10).iterrows():
-                print(f"Topic {row['topic_id']} (Size: {row['size']}): {row['keywords']}")
-                
-    print_themes(oz_topics, "OZEMPIC")
-    print_themes(met_topics, "METFORMIN")
+def print_themes(df, name):
+    print(f"\n--- {name} CORE THEMES ---")
+    if df.empty: print("No topics generated.")
+    else:
+        for _, row in df[df['topic_id'] != -1].head(10).iterrows():
+            print(f"Topic {row['topic_id']} (Size: {row['size']}): {row['keywords']}")
 
 def main():
-    ozempic_file, metformin_file = 'data/processed/ozempic_sentiment.csv', 'data/processed/metformin_sentiment.csv'
-    if not (os.path.exists(ozempic_file) and os.path.exists(metformin_file)): return
-        
-    oz_df = pd.read_csv(ozempic_file).dropna(subset=['clean_text'])
-    met_df = pd.read_csv(metformin_file).dropna(subset=['clean_text'])
-    
-    oz_model, _ = run_topic_model(oz_df['clean_text'].tolist(), "Ozempic")
-    oz_summary = get_topic_summary(oz_model)
-    oz_summary.to_csv('data/processed/ozempic_topics.csv', index=False)
-    
-    met_model, _ = run_topic_model(met_df['clean_text'].tolist(), "Metformin")
-    met_summary = get_topic_summary(met_model)
-    met_summary.to_csv('data/processed/metformin_topics.csv', index=False)
-    
-    compare_drug_topics(oz_summary, met_summary)
+    drugs = ['ozempic', 'metformin', 'ibuprofen', 'sertraline', 'lisinopril', 'jardiance']
+    for drug in drugs:
+        in_file = f'data/processed/{drug}_sentiment.csv'
+        out_file = f'data/processed/{drug}_topics.csv'
+        if not os.path.exists(in_file): continue
+            
+        df = pd.read_csv(in_file).dropna(subset=['clean_text'])
+        if df.empty: continue
+            
+        model, _ = run_topic_model(df['clean_text'].tolist(), drug.capitalize())
+        summary = get_topic_summary(model)
+        summary.to_csv(out_file, index=False)
+        print_themes(summary, drug.upper())
 
 if __name__ == '__main__':
     main()

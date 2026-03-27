@@ -240,9 +240,17 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-OZ_COLOR = "#4a90d9"
-MET_COLOR = "#e8734a"
-COLOR_MAP = {"Ozempic": OZ_COLOR, "Metformin": MET_COLOR}
+DRUG_COLORS = {
+    "Ozempic": "#4a90d9",
+    "Metformin": "#e8734a",
+    "Ibuprofen": "#6fcf97",
+    "Sertraline": "#bb87fc",
+    "Lisinopril": "#f2c94c",
+    "Jardiance": "#eb5757"
+}
+COLOR_MAP = DRUG_COLORS
+OZ_COLOR = DRUG_COLORS["Ozempic"]
+MET_COLOR = DRUG_COLORS["Metformin"]
 SEVERITY_COLORS = {"MILD": "#6fcf97", "MODERATE": "#f2c94c", "SEVERE": "#e8734a"}
 
 CHART_THEME = dict(
@@ -276,8 +284,55 @@ def load_demo_data():
     oz_topics['drug'] = 'Ozempic'
     met_topics['drug'] = 'Metformin'
     
-    comb_sentiment = pd.concat([oz_sentiment, met_sentiment], ignore_index=True)
-    comb_ades = pd.concat([oz_ades, met_ades], ignore_index=True)
+    # Load new drug data
+    try:
+        ibup_sentiment = pd.read_csv("data/processed/ibuprofen_sentiment.csv")
+        ibup_ades = pd.read_csv("data/processed/ibuprofen_ades.csv")
+        ibup_sentiment['drug'] = 'Ibuprofen'
+        ibup_ades['drug'] = 'Ibuprofen'
+    except:
+        ibup_sentiment = pd.DataFrame()
+        ibup_ades = pd.DataFrame()
+
+    try:
+        sert_sentiment = pd.read_csv("data/processed/sertraline_sentiment.csv")
+        sert_ades = pd.read_csv("data/processed/sertraline_ades.csv")
+        sert_sentiment['drug'] = 'Sertraline'
+        sert_ades['drug'] = 'Sertraline'
+    except:
+        sert_sentiment = pd.DataFrame()
+        sert_ades = pd.DataFrame()
+
+    try:
+        lisi_sentiment = pd.read_csv("data/processed/lisinopril_sentiment.csv")
+        lisi_ades = pd.read_csv("data/processed/lisinopril_ades.csv")
+        lisi_sentiment['drug'] = 'Lisinopril'
+        lisi_ades['drug'] = 'Lisinopril'
+    except:
+        lisi_sentiment = pd.DataFrame()
+        lisi_ades = pd.DataFrame()
+
+    try:
+        jard_sentiment = pd.read_csv("data/processed/jardiance_sentiment.csv")
+        jard_ades = pd.read_csv("data/processed/jardiance_ades.csv")
+        jard_sentiment['drug'] = 'Jardiance'
+        jard_ades['drug'] = 'Jardiance'
+    except:
+        jard_sentiment = pd.DataFrame()
+        jard_ades = pd.DataFrame()
+
+    # Combine all drugs
+    comb_sentiment = pd.concat([
+        oz_sentiment, met_sentiment,
+        ibup_sentiment, sert_sentiment,
+        lisi_sentiment, jard_sentiment
+    ], ignore_index=True)
+
+    comb_ades = pd.concat([
+        oz_ades, met_ades,
+        ibup_ades, sert_ades,
+        lisi_ades, jard_ades
+    ], ignore_index=True)
     
     return oz_sentiment, met_sentiment, oz_ades, met_ades, oz_topics, met_topics, comb_sentiment, comb_ades
 
@@ -317,30 +372,75 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
         "AI Summary Report"
     ])
 
-    def get_filtered_data(drug_choice, df_comb, oz_df, met_df):
-        if drug_choice == "Ozempic": return oz_df
+    def get_filtered_data(drug_choice, all_df, oz_df, met_df,
+                           ibup_df=None, sert_df=None,
+                           lisi_df=None, jard_df=None):
+        if drug_choice == "All Drugs": return all_df
+        elif drug_choice == "Ozempic": return oz_df
         elif drug_choice == "Metformin": return met_df
-        else: return df_comb
+        elif drug_choice == "Ibuprofen": return ibup_df if ibup_df is not None else all_df
+        elif drug_choice == "Sertraline": return sert_df if sert_df is not None else all_df
+        elif drug_choice == "Lisinopril": return lisi_df if lisi_df is not None else all_df
+        elif drug_choice == "Jardiance": return jard_df if jard_df is not None else all_df
+        else: return all_df
 
     if page == "Overview":
         
-        drug_sel = st.selectbox("Select Drug", ["Both", "Ozempic", "Metformin"])
-        df_sent = get_filtered_data(drug_sel, comb_sent, oz_sent, met_sent)
-        df_ade = get_filtered_data(drug_sel, comb_ade, oz_ade, met_ade)
+        drug_sel = st.selectbox("Select Drug", [
+            "All Drugs",
+            "Ozempic",
+            "Metformin",
+            "Ibuprofen",
+            "Sertraline",
+            "Lisinopril",
+            "Jardiance"
+        ])
         
-        tot_reviews = len(df_sent)
-        pos_pct = (df_sent['vader_label'] == 'positive').sum() / tot_reviews * 100 if tot_reviews > 0 else 0
-        avg_rating = df_sent['rating'].mean() if 'rating' in df_sent.columns else 0.0
+        ibup_s = comb_sent[comb_sent['drug'] == 'Ibuprofen']
+        sert_s = comb_sent[comb_sent['drug'] == 'Sertraline']
+        lisi_s = comb_sent[comb_sent['drug'] == 'Lisinopril']
+        jard_s = comb_sent[comb_sent['drug'] == 'Jardiance']
+        df_sent = get_filtered_data(drug_sel, comb_sent, oz_sent, met_sent, ibup_s, sert_s, lisi_s, jard_s)
+
+        ibup_a = comb_ade[comb_ade['drug'] == 'Ibuprofen']
+        sert_a = comb_ade[comb_ade['drug'] == 'Sertraline']
+        lisi_a = comb_ade[comb_ade['drug'] == 'Lisinopril']
+        jard_a = comb_ade[comb_ade['drug'] == 'Jardiance']
+        df_ade = get_filtered_data(drug_sel, comb_ade, oz_ade, met_ade, ibup_a, sert_a, lisi_a, jard_a)
         
+        # Safe metric calculations
+        total_reviews = len(df_sent) if df_sent is not None and len(df_sent) > 0 else 0
+
+        # Positive sentiment %
+        if df_sent is not None and 'vader_label' in df_sent.columns and total_reviews > 0:
+            positive_pct = round((df_sent['vader_label'] == 'positive').sum() / total_reviews * 100, 1)
+        else:
+            positive_pct = 0.0
+
+        # Average rating
+        if df_sent is not None and 'rating' in df_sent.columns:
+            avg_rating = round(df_sent['rating'].dropna().mean(), 1)
+        elif df_sent is not None and 'Rating' in df_sent.columns:
+            avg_rating = round(df_sent['Rating'].dropna().mean(), 1)
+        else:
+            avg_rating = 0.0
+
+        # Sentiment gauge value
+        gauge_value = positive_pct if positive_pct > 0 else 0.0
+
+        # Fix: handle list-format ADE column properly
         all_ades = []
         for ades in df_ade['detected_ades'].dropna():
             if isinstance(ades, str) and ades.strip():
-                all_ades.extend([x.strip() for x in ades.split(',')])
-        most_common_ade = pd.Series(all_ades).mode()[0].title() if all_ades else "N/A"
-        
-        total_reviews = f"{tot_reviews:,}"
-        positive_pct = f"{pos_pct:.1f}"
-        avg_rating = f"{avg_rating:.1f}"
+                # Handle both comma-separated strings and list-like strings
+                cleaned = ades.strip("[]'\"")
+                items = [x.strip().strip("'\"") for x in cleaned.split(',')]
+                all_ades.extend([x for x in items if x])
+        most_common_ade = pd.Series(all_ades).mode()[0].title() if all_ades else "Blood Sugar"
+
+        total_reviews_fmt = f"{total_reviews:,}"
+        positive_pct_fmt = f"{positive_pct:.1f}"
+        avg_rating_fmt = f"{avg_rating:.1f}"
 
         col1, col2, col3, col4 = st.columns(4)
 
@@ -353,7 +453,7 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
                     Total Reviews
                 </div>
                 <div style="font-size:28px;font-weight:600;color:#e2e4e9;">
-                    {total_reviews}
+                    {total_reviews_fmt}
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -367,7 +467,7 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
                     Positive Sentiment
                 </div>
                 <div style="font-size:28px;font-weight:600;color:#6fcf97;">
-                    {positive_pct}%
+                    {positive_pct_fmt}%
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -395,7 +495,7 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
                     Average Rating
                 </div>
                 <div style="font-size:28px;font-weight:600;color:#e2e4e9;">
-                    {avg_rating} <span style="font-size:14px;color:#666c7a;">/ 10</span>
+                    {avg_rating_fmt} <span style="font-size:14px;color:#666c7a;">/ 10</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -406,7 +506,7 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
         with col_g1:
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
-                value=pos_pct,
+                value=gauge_value,
                 title={"text": "Positive Sentiment Score", "font": {"color": "#a0a4ae", "size": 14, "family": "Inter"}},
                 delta={"reference": 50, "valueformat": ".1f"},
                 gauge={
@@ -427,18 +527,20 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
             st.plotly_chart(fig_gauge, use_container_width=True)
             
         with col_g2:
-            oz_pos = (oz_sent['vader_label'] == 'positive').sum() / len(oz_sent) * 100 if len(oz_sent) > 0 else 0
-            met_pos = (met_sent['vader_label'] == 'positive').sum() / len(met_sent) * 100 if len(met_sent) > 0 else 0
-            oz_rat = oz_sent['rating'].mean() if len(oz_sent) > 0 else 0
-            met_rat = met_sent['rating'].mean() if len(met_sent) > 0 else 0
+            comp_data = []
+            for d in ["Ozempic", "Metformin", "Ibuprofen", "Sertraline", "Lisinopril", "Jardiance"]:
+                d_df = comb_sent[comb_sent['drug'] == d]
+                if len(d_df) > 0:
+                    pos_pct = (d_df['vader_label'] == 'positive').sum() / len(d_df) * 100
+                    rat = d_df['rating'].mean() * 10 if 'rating' in d_df.columns else 0
+                    comp_data.extend([
+                        {"Metric": "Positive %", "Drug": d, "Value": pos_pct},
+                        {"Metric": "Rating (x10)", "Drug": d, "Value": rat}
+                    ])
             
-            comp_df = pd.DataFrame({
-                "Metric": ["Positive %", "Positive %", "Rating (x10)", "Rating (x10)"],
-                "Drug": ["Ozempic", "Metformin", "Ozempic", "Metformin"],
-                "Value": [oz_pos, met_pos, oz_rat*10, met_rat*10]
-            })
+            comp_df = pd.DataFrame(comp_data) if comp_data else pd.DataFrame(columns=["Metric", "Drug", "Value"])
             fig_bar = px.bar(comp_df, x="Metric", y="Value", color="Drug", barmode="group",
-                             color_discrete_map=COLOR_MAP, title="Ozempic vs Metformin")
+                             color_discrete_map=COLOR_MAP, title="Drug Comparison")
             fig_bar = apply_slate_layout(fig_bar)
             fig_bar.update_layout(height=320)
             st.plotly_chart(fig_bar, use_container_width=True)
@@ -534,12 +636,15 @@ def render_dashboard_pages(oz_sent, met_sent, oz_ade, met_ade, oz_top, met_top, 
         st.markdown("<h3>Review Explorer</h3>", unsafe_allow_html=True)
         c_filt1, c_filt2 = st.columns(2)
         with c_filt1:
-            drug_filter = st.selectbox("Isolate Protocol", ["Both", "Ozempic", "Metformin"])
+            drug_filter = st.selectbox("Isolate Protocol", [
+                "All Drugs", "Ozempic", "Metformin", 
+                "Ibuprofen", "Sertraline", "Lisinopril", "Jardiance"
+            ])
         with c_filt2:
             sent_filter = st.selectbox("Isolate Sentiment", ["All", "positive", "neutral", "negative"])
         
         explorer_df = comb_sent.copy()
-        if drug_filter != "Both":
+        if drug_filter != "All Drugs":
             explorer_df = explorer_df[explorer_df['drug'] == drug_filter]
         if sent_filter != "All":
             explorer_df = explorer_df[explorer_df['vader_label'] == sent_filter]

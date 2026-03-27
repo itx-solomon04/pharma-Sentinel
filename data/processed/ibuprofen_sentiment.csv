@@ -1,0 +1,11 @@
+drug,condition,text,rating,date,helpful_votes,source,clean_text,word_count,detected_ades,meddra_categories,ade_count,ade_severities,vader_score,vader_label,efficacy_sentiment,side_effect_sentiment,cost_sentiment,experience_sentiment,overall_sentiment
+Ibuprofen,Pain / Inflammation,"Effective anti-inflammatory, helps with my joint pain",7,2023-04-15,0,synthetic,effective anti-inflammatory helps joint pain,5,,,0,,0.34,positive,0.34,0.34,,,0.34
+Ibuprofen,Pain / Inflammation,Severe stomach pain and nausea after taking ibuprofen,2,2023-12-07,19,synthetic,severe stomach pain nausea taking ibuprofen,6,"stomach, nausea",Gastrointestinal disorders,2,"SEVERE, SEVERE",-0.7096,negative,,-0.7096,,,-0.7096
+Ibuprofen,Pain / Inflammation,"Stomach ulcer developed after long term use, awful",1,2023-10-12,26,synthetic,stomach ulcer developed long term use awful,7,stomach,Gastrointestinal disorders,1,SEVERE,-0.4588,negative,,-0.4588,,,-0.4588
+Ibuprofen,Pain / Inflammation,"Ibuprofen works fast for my pain relief, highly recommend",8,2023-11-29,41,synthetic,ibuprofen works fast pain relief highly recommend,7,,,0,,0.3804,positive,0.3804,0.3804,,,0.3804
+Ibuprofen,Pain / Inflammation,Got terrible headaches and dizziness from this drug,3,2022-09-09,10,synthetic,got terrible headaches dizziness drug,5,dizziness,Nervous system disorders,1,SEVERE,-0.4767,negative,,-0.4767,,,-0.4767
+Ibuprofen,Pain / Inflammation,"Caused heartburn and acid reflux, very uncomfortable",1,2022-06-05,11,synthetic,caused heartburn acid reflux uncomfortable,5,,,0,,-0.3818,negative,,,,,
+Ibuprofen,Pain / Inflammation,"Kidney pain and water retention, very concerned",3,2023-06-03,27,synthetic,kidney pain water retention concerned,5,kidney,Renal disorders,1,SEVERE,-0.5106,negative,,-0.5106,,,-0.5106
+Ibuprofen,Pain / Inflammation,Quick relief from fever and body aches,9,2022-12-04,10,synthetic,quick relief fever body aches,5,,,0,,0.2732,positive,,,,,
+Ibuprofen,Pain / Inflammation,"Works well for my arthritis pain, significant improvement",8,2024-02-22,27,synthetic,works well arthritis pain significant improvement,6,,,0,,0.3818,positive,0.3818,0.3818,,,0.3818
+Ibuprofen,Pain / Inflammation,"Great for headaches and inflammation, very effective",9,2024-04-16,37,synthetic,great headaches inflammation effective,4,,,0,,0.802,positive,0.802,0.802,,,0.802

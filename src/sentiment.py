@@ -60,24 +60,22 @@ def analyze_dataframe(df):
     df['overall_sentiment'] = overall_aspect_scores
     return df
 
-def compare_drugs(oz_sent_df, met_sent_df):
-    def print_distributions(df, name):
-        dist = df['vader_label'].value_counts(normalize=True) * 100
-        print(f"\n--- {name} Sentiment ---")
-        print(f"Positive: {dist.get('positive', 0):.1f}% | Negative: {dist.get('negative', 0):.1f}% | Neutral: {dist.get('neutral', 0):.1f}%")
-    print_distributions(oz_sent_df, "Ozempic")
-    print_distributions(met_sent_df, "Metformin")
+def print_distributions(df, name):
+    dist = df['vader_label'].value_counts(normalize=True) * 100
+    print(f"\n--- {name} Sentiment ---")
+    print(f"Positive: {dist.get('positive', 0):.1f}% | Negative: {dist.get('negative', 0):.1f}% | Neutral: {dist.get('neutral', 0):.1f}%")
 
 def main():
-    ozempic_file, metformin_file = 'data/processed/ozempic_ades.csv', 'data/processed/metformin_ades.csv'
-    if not (os.path.exists(ozempic_file) and os.path.exists(metformin_file)): return
-        
-    oz_df, met_df = pd.read_csv(ozempic_file), pd.read_csv(metformin_file)
-    oz_sent_df, met_sent_df = analyze_dataframe(oz_df), analyze_dataframe(met_df)
-    
-    oz_sent_df.to_csv('data/processed/ozempic_sentiment.csv', index=False)
-    met_sent_df.to_csv('data/processed/metformin_sentiment.csv', index=False)
-    compare_drugs(oz_sent_df, met_sent_df)
+    drugs = ['ozempic', 'metformin', 'ibuprofen', 'sertraline', 'lisinopril', 'jardiance']
+    for drug in drugs:
+        in_file = f'data/processed/{drug}_ades.csv'
+        out_file = f'data/processed/{drug}_sentiment.csv'
+        if not os.path.exists(in_file): continue
+            
+        df = pd.read_csv(in_file)
+        sent_df = analyze_dataframe(df)
+        sent_df.to_csv(out_file, index=False)
+        print_distributions(sent_df, drug.capitalize())
 
 if __name__ == "__main__":
     main()

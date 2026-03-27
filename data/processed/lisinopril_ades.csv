@@ -1,0 +1,11 @@
+drug,condition,text,rating,date,helpful_votes,source,clean_text,word_count,detected_ades,meddra_categories,ade_count,ade_severities
+Lisinopril,Hypertension,Persistent dry cough that won't go away since starting lisinopril,1,2022-03-22,2,synthetic,persistent dry cough go away since starting lisinopril,8,,,0,
+Lisinopril,Hypertension,Dizziness and lightheadedness when standing up,4,2024-03-20,3,synthetic,dizziness lightheadedness standing,3,dizziness,Nervous system disorders,1,MILD
+Lisinopril,Hypertension,Protecting my kidneys while controlling blood pressure,10,2024-02-24,18,synthetic,protecting kidneys controlling blood pressure,5,,,0,
+Lisinopril,Hypertension,"Easy once daily dosing, blood pressure well managed",10,2023-02-10,26,synthetic,easy daily dosing blood pressure well managed,7,,,0,
+Lisinopril,Hypertension,"BP dropped from 160/100 to 120/80, very effective",9,2023-05-26,0,synthetic,bp dropped 160 100 120 80 effective,7,,,0,
+Lisinopril,Hypertension,"Severe cough is unbearable, need to switch medications",3,2022-04-22,44,synthetic,severe cough unbearable need switch medications,6,,,0,
+Lisinopril,Hypertension,"Great medication for hypertension, minimal side effects",9,2024-04-03,29,synthetic,great medication hypertension minimal side effects,6,,,0,
+Lisinopril,Hypertension,"Swelling in my lips and throat, very scary reaction",1,2023-02-20,35,synthetic,swelling lips throat scary reaction,5,,,0,
+Lisinopril,Hypertension,Blood pressure perfectly controlled with lisinopril,7,2023-09-02,21,synthetic,blood pressure perfectly controlled lisinopril,5,,,0,
+Lisinopril,Hypertension,"Fatigue and weakness, hard to get through the day",1,2022-07-24,29,synthetic,fatigue weakness hard get day,5,fatigue,General disorders,1,SEVERE
